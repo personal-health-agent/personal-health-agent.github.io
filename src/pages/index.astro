@@ -1,0 +1,403 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionIcon from '../components/SectionIcon.astro';
+import { withBase } from '../utils/url';
+
+// All content comes from markdown files under src/content/.
+// To edit, find the matching .md file. The TypeScript files in this
+// directory are layout/structure only.
+
+const courseEntry  = (await getEntry('course',  'course'))!;
+const prereqEntry  = (await getEntry('prereqs', 'prereqs'))!;
+const projectEntry = (await getEntry('project', 'project'))!;
+const gradingEntry = (await getEntry('grading', 'grading'))!;
+
+const instructors = (await getCollection('instructors')).sort((a, b) => a.data.order - b.data.order);
+const policies    = (await getCollection('policies')).sort((a, b) => a.data.order - b.data.order);
+const weeks       = (await getCollection('weeks')).sort((a, b) => a.data.week - b.data.week);
+
+const course = courseEntry.data;
+const { Content: CourseBody }  = await courseEntry.render();
+const { Content: PrereqBody }  = await prereqEntry.render();
+const { Content: ProjectBody } = await projectEntry.render();
+const { Content: GradingBody } = await gradingEntry.render();
+
+// Teaching assistants (not a content collection — small and stable).
+const tas = [
+  { name: 'Millie Wu', email: 'mw3209@columbia.edu' },
+  { name: 'Reya Vir',  email: 'rrv2116@columbia.edu' },
+];
+---
+<BaseLayout>
+  <div class="container-wide" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+
+    <!-- In-page nav -->
+    <nav aria-label="Page sections" style="position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--rule); margin: -2.5rem -1.5rem 2rem; padding: 0.625rem 1.5rem; font-size: 0.875rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: baseline;">
+      <strong style="font-weight: 600; color: var(--text); margin-right: 0.5rem;">{course.code}</strong>
+      <a href="#about"        style="text-decoration: none; color: var(--text-muted);">About</a>
+      <a href="#instructors"  style="text-decoration: none; color: var(--text-muted);">Staff</a>
+      <a href="#schedule"     style="text-decoration: none; color: var(--text-muted);">Schedule</a>
+      <a href="#fit"          style="text-decoration: none; color: var(--text-muted);">Who's a fit</a>
+      <a href="#project"      style="text-decoration: none; color: var(--text-muted);">Project</a>
+      <a href="#grading"      style="text-decoration: none; color: var(--text-muted);">Grading</a>
+      <a href="#policies"     style="text-decoration: none; color: var(--text-muted);">Policies</a>
+    </nav>
+
+    <!-- Work-in-progress notice -->
+    <div style="background: var(--highlight); border-left: 3px solid var(--link); border-radius: 4px; padding: 0.75rem 1rem; margin-bottom: 2rem; font-size: 0.9375rem; color: var(--text-muted);">
+      This syllabus and schedule are still being finalized and will keep changing until the term begins. Check back for updates.
+    </div>
+
+    <!-- Title -->
+    <header style="margin-bottom: 2rem;">
+      <div class="meta" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-bottom: 0.5rem;">
+        {course.code}{course.crossListed && <Fragment> · {course.crossListed}</Fragment>} · {course.term}
+      </div>
+      <h1 class="section-h" style="margin-bottom: 0.5rem;">{course.title}</h1>
+      <p style="font-size: 1.125rem; color: var(--text-muted); margin: 0 0 0.75rem;">
+        {course.subtitle}
+      </p>
+      <p class="meta" style="margin: 0;">
+        {course.meetingPattern}{course.location && <Fragment> · {course.location}</Fragment>} · Columbia University
+      </p>
+    </header>
+
+    <hr />
+
+    <!-- About -->
+    <section id="about">
+      <h2 class="section-h"><SectionIcon name="about" />About</h2>
+      <div class="md-prose">
+        <CourseBody />
+      </div>
+
+      <div class="highlight-grid">
+        {course.highlights.map((h) => (
+          <div class="highlight-item">{h}</div>
+        ))}
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Staff -->
+    <section id="instructors">
+      <h2 class="section-h"><SectionIcon name="instructors" />Staff</h2>
+      <div class="two-col">
+        {instructors.map((entry) => {
+          const p = entry.data;
+          return (
+            <div>
+              <strong>{p.name}</strong>
+              <div class="meta">{p.role} · {p.affiliation}</div>
+              <div class="small" style="margin-top: 0.25rem;">
+                {p.email && <a href={`mailto:${p.email}`}>{p.email}</a>}
+                {p.email && p.homepage && <span> · </span>}
+                {p.homepage && <a href={p.homepage} target="_blank" rel="noopener noreferrer">homepage</a>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <div style="margin-top: 1.25rem;">
+        <span class="meta" style="text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem;">Teaching assistants</span>
+        <div class="small" style="margin-top: 0.375rem;">
+          {tas.map((t, i) => (
+            <Fragment>
+              {i > 0 && <span> · </span>}
+              {t.name} (<a href={`mailto:${t.email}`}>{t.email}</a>)
+            </Fragment>
+          ))}
+          <span> · office hours TBD</span>
+        </div>
+        <p class="small" style="margin-top: 0.5rem; color: var(--text-muted);">
+          TAs support weekly labs, office hours, Slack, grading of labs and project milestones, and the final showcase.
+        </p>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Schedule -->
+    <section id="schedule">
+      <h2 class="section-h"><SectionIcon name="schedule" />Schedule</h2>
+      <p class="small" style="margin-bottom: 1.25rem; color: var(--text-muted);">
+        Before Week&nbsp;4, students may give an optional 2-minute project pitch to help form teams
+        (up to 1% extra credit).
+      </p>
+
+      <div class="schedule-wrap">
+        <table class="schedule-table">
+          <thead>
+            <tr>
+              <th class="col-week">Week</th>
+              <th class="col-topic">Topic</th>
+              <th class="col-obj">Learning objective</th>
+              <th class="col-read">Readings</th>
+              <th class="col-slides">Slides</th>
+            </tr>
+          </thead>
+          <tbody>
+            {weeks.map((w) => (
+              w.data.isBreak ? (
+                <tr class="break-row">
+                  <td class="col-week">Week {w.data.week} · {w.data.date}</td>
+                  <td colspan="4">{w.data.title}</td>
+                </tr>
+              ) : (
+                <tr>
+                  <td class="col-week">Week {w.data.week} · {w.data.date}</td>
+                  <td class="col-topic">{w.data.title}</td>
+                  <td class="col-obj">{w.data.objective}</td>
+                  <td class="col-read">
+                    {w.data.readings.length === 0 ? (
+                      <span class="meta">TBD</span>
+                    ) : (
+                      w.data.readings.map((r) => (
+                        <div class="reading">
+                          {r.link ? (
+                            <a href={r.link} target="_blank" rel="noopener noreferrer">{r.title}</a>
+                          ) : (
+                            <span>{r.title}</span>
+                          )}
+                          {(r.authors || r.year) && (
+                            <span class="meta"> · {r.authors}{r.year ? `, ${r.year}` : ''}</span>
+                          )}
+                          {r.optional && <span class="meta"> (opt.)</span>}
+                        </div>
+                      ))
+                    )}
+                  </td>
+                  <td class="col-slides"></td>
+                </tr>
+              )
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Who's a fit -->
+    <section id="fit">
+      <h2 class="section-h"><SectionIcon name="fit" />Who's a fit</h2>
+      <div class="md-prose">
+        <PrereqBody />
+      </div>
+
+      <p style="margin-top: 1rem;">
+        Interested in taking the course? A short <strong>interest / pre-admission survey</strong> helps us
+        understand your background before registration.{course.surveyUrl
+          ? <Fragment> <a href={course.surveyUrl} target="_blank" rel="noopener noreferrer">Fill it out here</a>.</Fragment>
+          : <Fragment> The link will be posted here before the term.</Fragment>}
+      </p>
+
+      <h3 style="margin-top: 1.5rem;">Recommended background</h3>
+      <p class="small" style="margin-bottom: 1rem;">
+        These Columbia courses cover the skills we expect. They are a useful reference, not a checklist.
+        Equivalent skills from elsewhere count just as much.
+      </p>
+      <div class="three-col">
+        <div>
+          <div class="meta" style="text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; margin-bottom: 0.5rem;">
+            CS / data systems
+          </div>
+          <ul style="list-style: none; padding-left: 0;">
+            {prereqEntry.data.csCourses.map((c) => (
+              <li style="margin-bottom: 0.625rem;">
+                <span class="mono">{c.code}</span> · {c.title}
+                <div class="small">{c.skill}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <div class="meta" style="text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; margin-bottom: 0.5rem;">
+            Health / informatics
+          </div>
+          <ul style="list-style: none; padding-left: 0;">
+            {prereqEntry.data.healthCourses.map((c) => (
+              <li style="margin-bottom: 0.625rem;">
+                <span class="mono">{c.code}</span> · {c.title}
+                <div class="small">{c.skill}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <div class="meta" style="text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; margin-bottom: 0.5rem;">
+            HCI / design
+          </div>
+          <ul style="list-style: none; padding-left: 0;">
+            {prereqEntry.data.designCourses.map((c) => (
+              <li style="margin-bottom: 0.625rem;">
+                <span class="mono">{c.code}</span> · {c.title}
+                <div class="small">{c.skill}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Final project -->
+    <section id="project">
+      <h2 class="section-h"><SectionIcon name="project" />Final project</h2>
+      <div class="md-prose">
+        <ProjectBody />
+      </div>
+
+      {/* Project detail blocks intentionally not shown on the site — data kept in project.md frontmatter.
+      <h3 style="margin-top: 1.25rem;">What every project integrates</h3>
+      <ul>
+        {projectEntry.data.components.map((c) => (
+          <li>{c.label}{c.optional && <span class="meta"> (optional)</span>}</li>
+        ))}
+      </ul>
+      <h3 style="margin-top: 1.25rem;">Final showcase deliverables</h3>
+      <ul>
+        {projectEntry.data.showcase.map((s) => (<li>{s}</li>))}
+      </ul>
+      <h3 style="margin-top: 1.25rem;">Example tracks</h3>
+      <ul>
+        {projectEntry.data.examples.map((ex) => (
+          <li style="margin-bottom: 0.5rem;"><strong>{ex.name}.</strong> {ex.blurb}</li>
+        ))}
+      </ul>
+      */}
+    </section>
+
+    <hr />
+
+    <!-- Grading -->
+    <section id="grading">
+      <h2 class="section-h"><SectionIcon name="grading" />Grading</h2>
+      <div class="md-prose md-table-wrap">
+        <GradingBody />
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Policies -->
+    <section id="policies">
+      <h2 class="section-h"><SectionIcon name="policies" />Policies</h2>
+      <dl style="margin: 0;">
+        {policies.map(async (entry) => {
+          const { Content: PolicyBody } = await entry.render();
+          return (
+            <Fragment>
+              <dt style="font-weight: 600; margin-top: 1rem;">{entry.data.title}</dt>
+              <dd style="margin: 0.25rem 0 0;">
+                <div class="md-prose"><PolicyBody /></div>
+              </dd>
+            </Fragment>
+          );
+        })}
+      </dl>
+    </section>
+
+    <hr />
+
+    <!-- Sponsors -->
+    <section class="sponsors">
+      <div class="sponsors-label">Supported by</div>
+      <div class="sponsor-logos">
+        <img src={withBase('/sponsors/ai-vps.png')} alt="AI @ VP&S Initiative, Columbia Vagelos College of Physicians and Surgeons" />
+        <img src={withBase('/sponsors/collaboratory.png')} alt="The Collaboratory at Columbia University" />
+        <img src={withBase('/sponsors/dap-lab.png')} alt="DAP Lab" />
+      </div>
+    </section>
+
+    <hr />
+
+    <!-- Footer -->
+    <footer class="small" style="text-align: center; color: var(--text-subtle);">
+      {course.code} · {course.crossListed} · Columbia University
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .sponsors {
+    text-align: center;
+    margin: 2.5rem 0 1rem;
+  }
+  .sponsors-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-subtle);
+    margin-bottom: 1.5rem;
+  }
+  .sponsor-logos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1.5rem 2.5rem;
+  }
+  .sponsor-logos img {
+    height: 56px;
+    width: auto;
+    max-width: 100%;
+  }
+  @media (max-width: 560px) {
+    .sponsor-logos { gap: 1.5rem; }
+    .sponsor-logos img { height: 44px; }
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  @media (max-width: 720px) {
+    .three-col { grid-template-columns: 1fr; }
+  }
+
+  .schedule-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+  }
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    min-width: 860px;
+  }
+  .schedule-table thead th {
+    text-align: left;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .schedule-table tbody td {
+    padding: 0.625rem 0.75rem;
+    border-bottom: 1px solid var(--rule);
+    vertical-align: top;
+  }
+  .schedule-table tbody tr:last-child td { border-bottom: none; }
+  .schedule-table .col-week  { width: 11ch; white-space: nowrap; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+  .schedule-table .col-topic { width: 20%; font-weight: 600; }
+  .schedule-table .col-obj   { color: var(--text); }
+  .schedule-table .col-read  { width: 26%; }
+  .schedule-table .col-slides { width: 8ch; color: var(--text-subtle); }
+  .schedule-table .reading { margin-bottom: 0.375rem; line-height: 1.4; }
+  .schedule-table .reading:last-child { margin-bottom: 0; }
+  .schedule-table .break-row td {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+</style>

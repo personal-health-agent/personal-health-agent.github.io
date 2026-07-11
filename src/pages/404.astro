@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/url';
+---
+<BaseLayout title="Page not found">
+  <div class="container" style="padding-top: 5rem; padding-bottom: 5rem; text-align: center;">
+    <p class="meta" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-bottom: 0.5rem;">404</p>
+    <h1>Page not found</h1>
+    <p style="margin-top: 1rem;">
+      The page you're looking for doesn't exist. <a href={withBase('/')}>Return to the course page →</a>
+    </p>
+  </div>
+</BaseLayout>

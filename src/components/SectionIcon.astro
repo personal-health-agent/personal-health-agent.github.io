@@ -1,0 +1,60 @@
+---
+// Small monoline SVG icons used next to section H2s. Use `currentColor` so they
+// pick up the heading color. Set the size via the icon-size CSS variable.
+
+interface Props {
+  name: 'about' | 'instructors' | 'schedule' | 'fit' | 'project' | 'grading' | 'policies';
+}
+
+const { name } = Astro.props;
+---
+{name === 'about' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 8h.01" />
+    <path d="M11 12h1v4h1" />
+  </svg>
+)}
+{name === 'instructors' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M16 18v-1a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v1" />
+    <circle cx="10" cy="7" r="3" />
+    <path d="M20 18v-1a4 4 0 0 0-3-3.87" />
+    <path d="M16 4.13a3 3 0 0 1 0 5.74" />
+  </svg>
+)}
+{name === 'schedule' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="16" rx="2" />
+    <path d="M3 10h18" />
+    <path d="M8 3v4" />
+    <path d="M16 3v4" />
+  </svg>
+)}
+{name === 'fit' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M8 12.5l3 3 5-6" />
+  </svg>
+)}
+{name === 'project' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <circle cx="12" cy="12" r="5" />
+    <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+  </svg>
+)}
+{name === 'grading' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4 20h16" />
+    <rect x="6" y="12" width="3" height="8" />
+    <rect x="11" y="6" width="3" height="14" />
+    <rect x="16" y="9" width="3" height="11" />
+  </svg>
+)}
+{name === 'policies' && (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 3l8 3v6c0 4.5-3.5 8-8 9-4.5-1-8-4.5-8-9V6l8-3z" />
+    <path d="M9 12l2.5 2.5L15.5 10" />
+  </svg>
+)}
