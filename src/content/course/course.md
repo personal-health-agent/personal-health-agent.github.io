@@ -1,6 +1,7 @@
 ---
 code: "BINF 4070"
 crossListed: "COMS 4995 W008"
+shortName: "Personal Health Agent"
 title: "The Future of Personal Health Assistant"
 subtitle: "Multimodal Health Data Management Agents"
 term: "Fall 2026"

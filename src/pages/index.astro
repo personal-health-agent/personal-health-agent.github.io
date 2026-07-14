@@ -34,7 +34,7 @@ const tas = [
 
     <!-- In-page nav -->
     <nav aria-label="Page sections" style="position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--rule); margin: -2.5rem -1.5rem 2rem; padding: 0.625rem 1.5rem; font-size: 0.875rem; display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; align-items: baseline;">
-      <strong style="font-weight: 600; color: var(--text); margin-right: 0.5rem;">{course.code}</strong>
+      <strong style="font-weight: 600; color: var(--text); margin-right: 0.5rem;">{course.shortName ?? course.code}</strong>
       <a href="#about"        style="text-decoration: none; color: var(--text-muted);">About</a>
       <a href="#instructors"  style="text-decoration: none; color: var(--text-muted);">Staff</a>
       <a href="#schedule"     style="text-decoration: none; color: var(--text-muted);">Schedule</a>

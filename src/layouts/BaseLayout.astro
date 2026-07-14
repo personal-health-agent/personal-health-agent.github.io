@@ -15,9 +15,10 @@ const courseData = courseEntry!.data;
 
 const finalDescription =
   description ?? courseData.title; // BaseLayout no longer needs the long body for meta tags
-const fullTitle = title
-  ? `${title} — ${courseData.code}: ${courseData.title}`
-  : `${courseData.code}: ${courseData.title}`;
+
+// Use the short name (not a single course number) so neither cross-listing is privileged.
+const shortName = courseData.shortName ?? courseData.code;
+const fullTitle = title ? `${title} · ${shortName}` : shortName;
 ---
 <!doctype html>
 <html lang="en">

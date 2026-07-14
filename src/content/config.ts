@@ -27,6 +27,7 @@ const course = defineCollection({
   schema: z.object({
     code: z.string(),
     crossListed: z.string().optional(),
+    shortName: z.string().optional(),   // browser tab + nav label; avoids privileging one course number
     title: z.string(),
     subtitle: z.string(),
     term: z.string(),
