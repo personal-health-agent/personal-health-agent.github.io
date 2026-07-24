@@ -1,0 +1,76 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/url';
+
+// All content comes from markdown files under src/content/project-details/.
+// This file is layout/structure only, mirroring index.astro.
+
+const courseEntry = (await getEntry('course', 'course'))!;
+const course = courseEntry.data;
+
+const sections = (await getCollection('project-details')).sort((a, b) => a.data.order - b.data.order);
+const anchorOf = (slug: string) => slug.replace(/^\d+-/, '');
+---
+<BaseLayout
+  title="Project details"
+  description="Milestones, formats, deliverables, and grading for the team project."
+>
+  <div class="container" style="padding-top: 2.5rem; padding-bottom: 4rem;">
+
+    <nav aria-label="Breadcrumb" class="small" style="margin-bottom: 1.5rem;">
+      <a href={withBase('/')}>← {course.shortName ?? course.code} course home</a>
+    </nav>
+
+    <header style="margin-bottom: 1.5rem;">
+      <div class="meta" style="font-family: ui-monospace, SFMono-Regular, Menlo, monospace; margin-bottom: 0.5rem;">
+        {course.code}{course.crossListed && <Fragment> · {course.crossListed}</Fragment>} · {course.term}
+      </div>
+      <h1 style="margin-bottom: 0.5rem;">Project details</h1>
+      <p style="font-size: 1.0625rem; color: var(--text-muted); margin: 0;">
+        Milestones, formats, deliverables, and grading for the team project, from first idea to final writeup.
+      </p>
+    </header>
+
+    <div style="background: var(--highlight); border-left: 3px solid var(--link); border-radius: 4px; padding: 0.75rem 1rem; margin-bottom: 1.5rem; font-size: 0.9375rem; color: var(--text-muted);">
+      Anything marked <em>tentative</em> is still being finalized and may shift before the term begins.
+      What is announced in class is authoritative.
+    </div>
+
+    <nav aria-label="Page sections" class="small" style="margin-bottom: 2rem;">
+      {sections.map((s, i) => (
+        <Fragment>
+          {i > 0 && <span style="color: var(--text-subtle);"> · </span>}
+          <a href={`#${anchorOf(s.slug)}`} style="text-decoration: none;">{s.data.title}</a>
+        </Fragment>
+      ))}
+    </nav>
+
+    {sections.map(async (entry, i) => {
+      const { Content } = await entry.render();
+      return (
+        <Fragment>
+          {i > 0 && <hr />}
+          <section id={anchorOf(entry.slug)}>
+            <h2 class="section-h">{entry.data.title}</h2>
+            <div class="md-prose"><Content /></div>
+          </section>
+        </Fragment>
+      );
+    })}
+
+    <hr />
+
+    <footer class="small" style="text-align: center; color: var(--text-subtle);">
+      {course.code} · {course.crossListed} · Columbia University
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  /* Milestone tables are wider than the narrow reading column — scroll, don't overflow. */
+  section :global(.md-prose table) {
+    display: block;
+    overflow-x: auto;
+  }
+</style>

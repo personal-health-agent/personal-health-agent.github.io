@@ -44,6 +44,22 @@ const tas = [
       <a href="#policies"     style="text-decoration: none; color: var(--text-muted);">Policies</a>
     </nav>
 
+    <!-- Pre-course survey banner -->
+    {course.surveyUrl && (
+      <aside class="survey-banner" aria-label="Pre-course survey">
+        <div class="survey-banner-text">
+          <strong>Pre-course survey.</strong> Interested in taking the course? Fill out the short
+          survey — it helps us understand your background before registration.
+          {course.surveyDeadline && (
+            <span class="survey-deadline">Due {course.surveyDeadline}.</span>
+          )}
+        </div>
+        <a class="survey-cta" href={course.surveyUrl} target="_blank" rel="noopener noreferrer">
+          Fill out the survey
+        </a>
+      </aside>
+    )}
+
     <!-- Work-in-progress notice -->
     <div style="background: var(--highlight); border-left: 3px solid var(--link); border-radius: 4px; padding: 0.75rem 1rem; margin-bottom: 2rem; font-size: 0.9375rem; color: var(--text-muted);">
       This syllabus and schedule are still being finalized and will keep changing until the term begins. Check back for updates.
@@ -189,10 +205,11 @@ const tas = [
       </div>
 
       <p style="margin-top: 1rem;">
-        Interested in taking the course? A short <strong>interest / pre-admission survey</strong> helps us
+        Interested in taking the course? A short <strong>pre-course survey</strong> helps us
         understand your background before registration.{course.surveyUrl
           ? <Fragment> <a href={course.surveyUrl} target="_blank" rel="noopener noreferrer">Fill it out here</a>.</Fragment>
-          : <Fragment> The link will be posted here before the term.</Fragment>}
+          : <Fragment> The link will be posted here before the term.</Fragment>}{course.surveyDeadline
+          && <Fragment> Responses are due <strong>{course.surveyDeadline}</strong>.</Fragment>}
       </p>
 
       <h3 style="margin-top: 1.5rem;">Recommended background</h3>
@@ -251,6 +268,12 @@ const tas = [
       <div class="md-prose">
         <ProjectBody />
       </div>
+
+      <p style="margin-top: 1.25rem;">
+        <a class="details-link" href={withBase('/project-details/')}>
+          Project details: milestones, formats, deliverables &amp; grading →
+        </a>
+      </p>
 
       {/* Project detail blocks intentionally not shown on the site — data kept in project.md frontmatter.
       <h3 style="margin-top: 1.25rem;">What every project integrates</h3>
@@ -324,6 +347,57 @@ const tas = [
 </BaseLayout>
 
 <style>
+  .survey-banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem 1.5rem;
+    background: #FFF8E6;
+    border: 1px solid #EAC97C;
+    border-left: 4px solid #B4690E;
+    border-radius: 6px;
+    padding: 0.875rem 1.125rem;
+    margin-bottom: 1rem;
+  }
+  .survey-banner-text {
+    max-width: 46rem;
+    font-size: 0.9375rem;
+  }
+  .survey-deadline {
+    display: block;
+    margin-top: 0.25rem;
+    font-weight: 700;
+    color: #8A4B08;
+  }
+  .survey-cta {
+    flex-shrink: 0;
+    background: var(--link);
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+  }
+  .survey-cta:hover {
+    background: var(--link-hover);
+    color: #FFFFFF;
+  }
+
+  .details-link {
+    display: inline-block;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+  .details-link:hover {
+    border-color: var(--link-hover);
+  }
+
   .sponsors {
     text-align: center;
     margin: 2.5rem 0 1rem;

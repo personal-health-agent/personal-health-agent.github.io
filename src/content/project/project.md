@@ -27,3 +27,5 @@ examples:
 ---
 
 Each team of 3–4 builds a working Personal Health Assistant. It pulls in data from at least one wearable, self-report, or behavioral source (a synthetic clinical record is optional), stores and retrieves it, reasons over it through an LLM/RAG/agent component, and shows the result through a simple interface a non-technical person could actually use. You will design for safety, privacy, and evaluation as you go, not bolt them on at the end. The term ends with a poster and demo showcase.
+
+The first graded milestone is the Week 9 proposal, and teams are expected to arrive with more than an idea: bring something concrete reviewers can react to — a rough prototype, a hand-drawn interface, a system sketch, or another tangible design artifact. The Week 8 design studio produces exactly these. Milestones, presentation formats, deliverables, and grading are spelled out on the [project details page](https://personal-health-agent.github.io/project-details/).

@@ -12,6 +12,7 @@ format: "One 3-hour weekly session"
 audience: "Senior undergrads and grad students from CS, data science, biomedical informatics, and related fields."
 meetingPattern: "Fridays 8:30–11:30 AM ET"
 surveyUrl: "https://forms.gle/5ohKnAjfegsDr8hk7"
+surveyDeadline: "Friday, September 11, 11:59 PM ET"
 highlights:
   - "You get a Fitbit in Week 1 and use your own data for the rest of the term."
   - "Teams are mixed by design: students with CS strengths paired with students with health, informatics, and design strengths."

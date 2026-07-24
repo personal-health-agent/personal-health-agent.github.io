@@ -37,7 +37,8 @@ const course = defineCollection({
     format: z.string().optional(),
     audience: z.string().optional(),
     meetingPattern: z.string().optional(),
-    surveyUrl: z.string().optional(),   // interest / pre-admission survey
+    surveyUrl: z.string().optional(),        // interest / pre-admission survey
+    surveyDeadline: z.string().optional(),   // human-readable deadline, e.g. "Friday, September 11, 11:59 PM ET"
     highlights: z.array(z.string()).default([]),
   }),
 });
@@ -104,6 +105,18 @@ const policies = defineCollection({
   }),
 });
 
+// One file per section: src/content/project-details/NN-slug.md
+// Rendered in order on the /project-details page (milestones, formats,
+// deliverables, grading). Same shape as policies: body = prose, frontmatter
+// = title + ordering.
+const projectDetails = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    order: z.number().default(0),
+  }),
+});
+
 // One file per week: src/content/weeks/NN-slug.md
 // Rendered as a single glanceable schedule table row. Keep each week to one
 // learning objective plus its assigned pre-readings; detail lives in the
@@ -121,4 +134,4 @@ const weeks = defineCollection({
   }),
 });
 
-export const collections = { course, prereqs, project, grading, instructors, policies, weeks };
+export const collections = { course, prereqs, project, grading, instructors, policies, weeks, 'project-details': projectDetails };
