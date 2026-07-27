@@ -49,7 +49,12 @@ const tas = [
       <aside class="survey-banner" aria-label="Pre-course survey">
         <div class="survey-banner-text">
           <strong>Pre-course survey.</strong> Interested in taking the course? Fill out the short
-          survey — it helps us understand your background before registration.
+          survey. We select the class from the registered and waitlisted students based on survey
+          responses, so fill it out even if you are already registered.
+          <span class="survey-note">
+            Check with your track advisor about whether this course counts toward your degree
+            requirements.
+          </span>
           {course.surveyDeadline && (
             <span class="survey-deadline">Due {course.surveyDeadline}.</span>
           )}
@@ -205,11 +210,17 @@ const tas = [
       </div>
 
       <p style="margin-top: 1rem;">
-        Interested in taking the course? A short <strong>pre-course survey</strong> helps us
-        understand your background before registration.{course.surveyUrl
+        Interested in taking the course? A short <strong>pre-course survey</strong> is how we
+        select the class: we choose from both the registered and waitlisted students based on
+        survey responses, so fill it out even if you are already registered.{course.surveyUrl
           ? <Fragment> <a href={course.surveyUrl} target="_blank" rel="noopener noreferrer">Fill it out here</a>.</Fragment>
           : <Fragment> The link will be posted here before the term.</Fragment>}{course.surveyDeadline
           && <Fragment> Responses are due <strong>{course.surveyDeadline}</strong>.</Fragment>}
+      </p>
+
+      <p style="margin-top: 0.75rem;">
+        Whether this course counts toward your degree requirements is up to your program. Check
+        with your track advisor before you register.
       </p>
 
       <h3 style="margin-top: 1.5rem;">Recommended background</h3>
@@ -364,9 +375,14 @@ const tas = [
     max-width: 46rem;
     font-size: 0.9375rem;
   }
+  .survey-note {
+    display: block;
+    margin-top: 0.375rem;
+    color: #6F4E12;
+  }
   .survey-deadline {
     display: block;
-    margin-top: 0.25rem;
+    margin-top: 0.375rem;
     font-weight: 700;
     color: #8A4B08;
   }
