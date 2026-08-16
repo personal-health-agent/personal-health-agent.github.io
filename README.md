@@ -33,8 +33,14 @@ src/content/
 ├── grading/grading.md    # the grading table
 ├── instructors/*.md      # one file per instructor
 ├── policies/*.md         # one per policy (AI use, privacy, devices, collaboration, ...)
+├── legal/*.md            # term-independent public privacy and service terms
 └── weeks/*.md            # one file per week; drives the schedule table
 ```
+
+The persistent privacy policy and terms page is generated from
+`src/content/legal/privacy-and-terms.md` at `/privacy-and-terms/`. Keep it
+independent of a particular semester; update `lastUpdated` when its substance
+changes.
 
 `src/content/config.ts` defines the schema for every file. If you add an unknown field or miss a required one, `npm run build` tells you exactly what is wrong.
 

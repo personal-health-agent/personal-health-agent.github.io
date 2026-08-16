@@ -117,6 +117,17 @@ const projectDetails = defineCollection({
   }),
 });
 
+// Persistent public policy pages. These are independent of a particular term
+// so OAuth, privacy, and service terms remain stable across course offerings.
+const legal = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    description: z.string(),
+    lastUpdated: z.string(),
+  }),
+});
+
 // One file per week: src/content/weeks/NN-slug.md
 // Rendered as a single glanceable schedule table row. Keep each week to one
 // learning objective plus its assigned pre-readings; detail lives in the
@@ -134,4 +145,14 @@ const weeks = defineCollection({
   }),
 });
 
-export const collections = { course, prereqs, project, grading, instructors, policies, weeks, 'project-details': projectDetails };
+export const collections = {
+  course,
+  prereqs,
+  project,
+  grading,
+  instructors,
+  policies,
+  weeks,
+  legal,
+  'project-details': projectDetails,
+};

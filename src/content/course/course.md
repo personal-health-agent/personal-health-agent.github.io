@@ -14,7 +14,7 @@ meetingPattern: "Fridays 8:30–11:30 AM ET"
 surveyUrl: "https://forms.gle/5ohKnAjfegsDr8hk7"
 surveyDeadline: "Friday, September 11, 11:59 PM ET"
 highlights:
-  - "You get a Fitbit in Week 1 and use your own data for the rest of the term."
+  - "You can use a loaner Fitbit and your own data, or take the equivalent synthetic-data path."
   - "Teams are mixed by design: students with CS strengths paired with students with health, informatics, and design strengths."
   - "Each week adds one block: data sources, storage, retrieval, agents, interface."
   - "Every week is grounded in real health data, not toy problems with made-up answers."

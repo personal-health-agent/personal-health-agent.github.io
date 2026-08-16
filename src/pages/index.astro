@@ -42,6 +42,7 @@ const tas = [
       <a href="#project"      style="text-decoration: none; color: var(--text-muted);">Project</a>
       <a href="#grading"      style="text-decoration: none; color: var(--text-muted);">Grading</a>
       <a href="#policies"     style="text-decoration: none; color: var(--text-muted);">Policies</a>
+      <a href={withBase('/privacy-and-terms/')} style="text-decoration: none; color: var(--text-muted);">Privacy &amp; terms</a>
     </nav>
 
     <!-- Pre-course survey banner -->
@@ -334,6 +335,11 @@ const tas = [
           );
         })}
       </dl>
+      <p style="margin-top: 1.25rem;">
+        <a class="details-link" href={withBase('/privacy-and-terms/')}>
+          Privacy policy and terms of service →
+        </a>
+      </p>
     </section>
 
     <hr />
@@ -352,7 +358,8 @@ const tas = [
 
     <!-- Footer -->
     <footer class="small" style="text-align: center; color: var(--text-subtle);">
-      {course.code} · {course.crossListed} · Columbia University
+      {course.code} · {course.crossListed} · Columbia University ·
+      <a href={withBase('/privacy-and-terms/')}>Privacy &amp; terms</a>
     </footer>
   </div>
 </BaseLayout>

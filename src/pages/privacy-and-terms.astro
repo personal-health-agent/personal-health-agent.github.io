@@ -1,0 +1,132 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/url';
+
+const courseEntry = (await getEntry('course', 'course'))!;
+const legalEntry = (await getEntry('legal', 'privacy-and-terms'))!;
+const course = courseEntry.data;
+const legal = legalEntry.data;
+const { Content } = await legalEntry.render();
+---
+
+<BaseLayout title={legal.title} description={legal.description}>
+  <div class="container legal-page">
+    <nav aria-label="Breadcrumb" class="small legal-breadcrumb">
+      <a href={withBase('/')}>← {course.shortName ?? course.code} course home</a>
+    </nav>
+
+    <header class="legal-header">
+      <div class="meta legal-kicker">Course website and optional connected-data services</div>
+      <h1>{legal.title}</h1>
+      <p>{legal.description}</p>
+      <p class="small legal-updated">Last updated: {legal.lastUpdated}</p>
+    </header>
+
+    <nav aria-label="Page sections" class="legal-section-nav">
+      <a href="#privacy-policy">Privacy Policy</a>
+      <a href="#terms-of-service">Terms of Service</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <article class="md-prose legal-prose">
+      <Content />
+    </article>
+
+    <hr />
+
+    <footer class="small legal-footer">
+      <a href={withBase('/')}>
+        {course.code}{course.crossListed ? ` · ${course.crossListed}` : ''} course home
+      </a>
+      <span aria-hidden="true">·</span>
+      <span>Columbia University</span>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .legal-page {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+
+  .legal-breadcrumb {
+    margin-bottom: 1.5rem;
+  }
+
+  .legal-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .legal-kicker {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-header h1 {
+    margin-bottom: 0.625rem;
+  }
+
+  .legal-header > p:not(.legal-updated) {
+    color: var(--text-muted);
+    font-size: 1.0625rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .legal-updated {
+    margin: 0;
+  }
+
+  .legal-section-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.75rem 0;
+    margin-bottom: 2rem;
+    font-size: 0.9375rem;
+  }
+
+  .legal-section-nav a {
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .legal-prose :global(h2) {
+    scroll-margin-top: 1.5rem;
+    margin-top: 2.5rem;
+    padding-top: 0.25rem;
+    font-size: 1.375rem;
+  }
+
+  .legal-prose :global(h3) {
+    scroll-margin-top: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .legal-prose :global(h4) {
+    margin-top: 1.125rem;
+  }
+
+  .legal-prose :global(pre) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .legal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.5rem;
+    text-align: center;
+    color: var(--text-subtle);
+  }
+
+  @media (max-width: 520px) {
+    .legal-page {
+      padding-top: 1.5rem;
+    }
+  }
+</style>

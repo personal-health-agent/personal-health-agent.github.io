@@ -62,7 +62,8 @@ const anchorOf = (slug: string) => slug.replace(/^\d+-/, '');
     <hr />
 
     <footer class="small" style="text-align: center; color: var(--text-subtle);">
-      {course.code} · {course.crossListed} · Columbia University
+      {course.code} · {course.crossListed} · Columbia University ·
+      <a href={withBase('/privacy-and-terms/')}>Privacy &amp; terms</a>
     </footer>
   </div>
 </BaseLayout>
