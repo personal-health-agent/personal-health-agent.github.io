@@ -4,7 +4,7 @@ description: "How the Personal Health Agent course website and optional Google H
 lastUpdated: "August 16, 2026"
 ---
 
-This page applies to the public website and to **BINF 4070 Personal Health Data Lab**, the optional Google Health authorization service offered by **BINF 4070 / COMS 4995 W008, Personal Health Agent**. It is intended to remain applicable across future course offerings.
+This page applies to the public website and to **BINF 4070 Personal Health Data Lab**, the optional Google Health authorization service. It is intended to remain applicable across future course offerings.
 
 Using personal health data is optional. Every activity that supports live Google Health data also provides a synthetic-data path. Choosing synthetic data does not affect grades, participation, access to instruction, or course support.
 
@@ -40,7 +40,7 @@ The helper does not decide eligibility from a visible email-address suffix or a 
 
 #### Google Health permissions
 
-For the 2026 offering, a student who chooses the live-data path is asked for these nine read-only Google Health categories:
+A student who chooses the live-data path is asked for these nine read-only Google Health categories:
 
 - activity and fitness;
 - health metrics and measurements;
