@@ -172,7 +172,10 @@ const tas = [
                 <tr>
                   <td class="col-week">Week {w.data.week} · {w.data.date}</td>
                   <td class="col-topic">{w.data.title}</td>
-                  <td class="col-obj">{w.data.objective}</td>
+                  <td class="col-obj">
+                    {w.data.objective}
+                    {w.data.assessment && <div class="assessment">{w.data.assessment}</div>}
+                  </td>
                   <td class="col-read">
                     {w.data.readings.length === 0 ? (
                       <span class="meta">TBD</span>
@@ -491,6 +494,7 @@ const tas = [
   .schedule-table .col-obj   { color: var(--text); }
   .schedule-table .col-read  { width: 26%; }
   .schedule-table .col-slides { width: 8ch; color: var(--text-subtle); }
+  .schedule-table .assessment { margin-top: 0.375rem; color: var(--link); font-weight: 600; }
   .schedule-table .reading { margin-bottom: 0.375rem; line-height: 1.4; }
   .schedule-table .reading:last-child { margin-bottom: 0; }
   .schedule-table .break-row td {

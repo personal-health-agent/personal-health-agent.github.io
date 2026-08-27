@@ -139,6 +139,7 @@ const weeks = defineCollection({
     date: z.string(),                 // Friday, e.g. "Sep 11"
     title: z.string(),
     objective: z.string().default(''),
+    assessment: z.string().optional(),
     readings: z.array(reading).default([]),
     isBreak: z.boolean().default(false),
     status: z.enum(['planned', 'draft', 'published']).default('planned'),
