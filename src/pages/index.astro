@@ -195,7 +195,18 @@ const tas = [
                       ))
                     )}
                   </td>
-                  <td class="col-slides"></td>
+                  <td class="col-slides">
+                    {w.data.slidesUrl && (
+                      <a
+                        href={w.data.slidesUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Week ${w.data.week} slides (PDF)`}
+                      >
+                        PDF
+                      </a>
+                    )}
+                  </td>
                 </tr>
               )
             ))}
