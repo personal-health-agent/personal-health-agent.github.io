@@ -11,8 +11,8 @@ The term ends with a poster-and-demo showcase: each team gives a one-minute ligh
 
 Checklist:
 
-- A working system behind the demo (**implementation, 30%**)
-- A live demo, with a recorded fallback (**demo, 20%**)
+- A working system behind the demo (**implementation, 15%**)
+- A live demo, with a recorded fallback (**demo, 15%**)
 - A poster or visual summary, including your architecture diagram
 - A short technical writeup (**15%**): what you built and how it works, your safety and privacy stance, what you measured against the criteria from your proposal, what you learned and would build next — plus who did what, and each member's individual reflection (what I tried, what failed, what I learned, how I used AI). Due **Wednesday, Dec 16, 11:59 PM ET** (tentative), so you can write about what happened at the showcase.
 

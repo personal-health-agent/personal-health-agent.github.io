@@ -9,6 +9,6 @@ The project has three deliverables, and your project grade accumulates across th
 
 - **Part 1 — Project idea one-pager** (Week 4 · Oct 2) · graded with the Week 4 lab
 - **Part 2 — Proposal presentation** (Week 9 · Nov 6) · **15%**
-- **Part 3 — Final demo** (Week 14 · Dec 11) · **30%** implementation + **20%** demo + **15%** writeup
+- **Part 3 — Final demo** (Week 14 · Dec 11) · **15%** implementation + **15%** demo + **15%** writeup
 
 Between the parts, the weekly labs carry the project forward — a project-direction discussion in Week 6, the Week 8 design studio that produces your proposal artifacts, and an integration checkpoint with a mock demo in Week 13 — so no part starts from a blank page.
