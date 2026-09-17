@@ -159,6 +159,7 @@ const tas = [
               <th class="col-obj">Learning objective</th>
               <th class="col-read">Readings</th>
               <th class="col-slides">Slides</th>
+              <th class="col-lab">Lab</th>
             </tr>
           </thead>
           <tbody>
@@ -166,7 +167,7 @@ const tas = [
               w.data.isBreak ? (
                 <tr class="break-row">
                   <td class="col-week">Week {w.data.week} · {w.data.date}</td>
-                  <td colspan="4">{w.data.title}</td>
+                  <td colspan="5">{w.data.title}</td>
                 </tr>
               ) : (
                 <tr>
@@ -204,6 +205,18 @@ const tas = [
                         aria-label={`Week ${w.data.week} slides (PDF)`}
                       >
                         PDF
+                      </a>
+                    )}
+                  </td>
+                  <td class="col-lab">
+                    {w.data.labUrl && (
+                      <a
+                        href={w.data.labUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Week ${w.data.week} lab notebook (GitHub)`}
+                      >
+                        Notebook
                       </a>
                     )}
                   </td>
@@ -505,6 +518,7 @@ const tas = [
   .schedule-table .col-obj   { color: var(--text); }
   .schedule-table .col-read  { width: 26%; }
   .schedule-table .col-slides { width: 8ch; color: var(--text-subtle); }
+  .schedule-table .col-lab { width: 10ch; color: var(--text-subtle); }
   .schedule-table .assessment { margin-top: 0.375rem; color: var(--link); font-weight: 600; }
   .schedule-table .reading { margin-bottom: 0.375rem; line-height: 1.4; }
   .schedule-table .reading:last-child { margin-bottom: 0; }

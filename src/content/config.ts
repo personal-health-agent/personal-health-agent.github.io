@@ -141,6 +141,7 @@ const weeks = defineCollection({
     objective: z.string().default(''),
     assessment: z.string().optional(),
     slidesUrl: z.string().optional(),
+    labUrl: z.string().optional(),
     readings: z.array(reading).default([]),
     isBreak: z.boolean().default(false),
     status: z.enum(['planned', 'draft', 'published']).default('planned'),
