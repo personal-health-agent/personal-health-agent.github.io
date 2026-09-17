@@ -37,6 +37,7 @@ const course = defineCollection({
     format: z.string().optional(),
     audience: z.string().optional(),
     meetingPattern: z.string().optional(),
+    repositoryUrl: z.string().url().optional(),
     surveyUrl: z.string().optional(),        // interest / pre-admission survey
     surveyDeadline: z.string().optional(),   // human-readable deadline, e.g. "Friday, September 11, 11:59 PM ET"
     highlights: z.array(z.string()).default([]),
