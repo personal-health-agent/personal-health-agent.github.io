@@ -10,7 +10,7 @@ credits: 3
 duration: "14 weeks"
 format: "One 3-hour weekly session"
 audience: "Senior undergrads and grad students from CS, data science, biomedical informatics, and related fields."
-meetingPattern: "Fridays 8:30–11:30 AM ET"
+meetingPattern: "Fridays 8:40–11:40 AM ET"
 repositoryUrl: "https://github.com/personal-health-agent/binf4070-2026"
 surveyUrl: "https://forms.gle/5ohKnAjfegsDr8hk7"
 surveyDeadline: "Friday, September 11, 11:59 PM ET"
