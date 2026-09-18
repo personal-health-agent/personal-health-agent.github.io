@@ -5,7 +5,7 @@ shortName: "Personal Health Agent"
 title: "The Future of Personal Health Assistant"
 subtitle: "Multimodal Health Data Management Agents"
 term: "Fall 2026"
-location: "825 Seeley W. Mudd Building"
+location: "1127 Mudd"
 credits: 3
 duration: "14 weeks"
 format: "One 3-hour weekly session"
