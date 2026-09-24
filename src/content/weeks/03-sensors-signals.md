@@ -1,7 +1,7 @@
 ---
 week: 3
 date: "Sep 25"
-title: "Health Data Sources II: Sensors, Signals & Derived Metrics"
+title: "Health Data Sources II: Wearable Sensors and Measurements"
 objective: "See how raw sensor signals become steps, heart rate, and sleep, and learn why the numbers on your dashboard are estimates, not ground truth."
 slidesUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-03/slides-03.pdf"
 labUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-03/lab-03.ipynb"

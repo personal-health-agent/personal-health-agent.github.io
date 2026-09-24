@@ -1,7 +1,7 @@
 ---
 week: 2
 date: "Sep 18"
-title: "Health Data Sources I: Clinical, Self-Report & Consumer Data"
+title: "Health Data Sources I: Clinical Records and FHIR App Design"
 objective: "Learn how clinical records, wearables, and self-report data are structured, and how FHIR and medical codes let a computer read a patient's record."
 slidesUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-02/slides-02.pdf"
 labUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-02/lab-02.ipynb"

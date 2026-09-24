@@ -1,7 +1,7 @@
 ---
 week: 1
 date: "Sep 11"
-title: "Kickoff: Personal Health Assistants & Health Data Foundations"
+title: "Personal Health Data Foundations"
 objective: "Get the big picture of personal health assistants and why health data is so fragmented, set up your course Fitbit, and start working with your own data."
 slidesUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-01/slides-01.pdf"
 labUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-01/lab-01.ipynb"
