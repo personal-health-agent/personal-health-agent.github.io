@@ -118,6 +118,20 @@ const projectDetails = defineCollection({
   }),
 });
 
+// Guest speaker pages. Body = supplied talk abstract and speaker biography.
+const guestSpeakers = defineCollection({
+  type: 'content',
+  schema: z.object({
+    title: z.string(),
+    name: z.string(),
+    role: z.string(),
+    affiliation: z.string(),
+    location: z.string(),
+    week: z.number().int().min(1).max(20),
+    photo: z.string(),
+  }),
+});
+
 // Persistent public policy pages. These are independent of a particular term
 // so OAuth, privacy, and service terms remain stable across course offerings.
 const legal = defineCollection({
@@ -143,6 +157,10 @@ const weeks = defineCollection({
     assessment: z.string().optional(),
     slidesUrl: z.string().optional(),
     labUrl: z.string().optional(),
+    guestSpeaker: z.object({
+      name: z.string(),
+      path: z.string().startsWith('/'),
+    }).optional(),
     readings: z.array(reading).default([]),
     isBreak: z.boolean().default(false),
     status: z.enum(['planned', 'draft', 'published']).default('planned'),
@@ -159,4 +177,5 @@ export const collections = {
   weeks,
   legal,
   'project-details': projectDetails,
+  'guest-speakers': guestSpeakers,
 };

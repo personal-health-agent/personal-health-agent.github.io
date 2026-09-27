@@ -182,7 +182,14 @@ const tas = [
               ) : (
                 <tr>
                   <td class="col-week">Week {w.data.week} · {w.data.date}</td>
-                  <td class="col-topic">{w.data.title}</td>
+                  <td class="col-topic">
+                    {w.data.title}
+                    {w.data.guestSpeaker && (
+                      <a class="guest-speaker-link" href={withBase(w.data.guestSpeaker.path)}>
+                        Guest talk: {w.data.guestSpeaker.name}
+                      </a>
+                    )}
+                  </td>
                   <td class="col-obj">
                     {w.data.objective}
                     {w.data.assessment && <div class="assessment">{w.data.assessment}</div>}
@@ -402,6 +409,13 @@ const tas = [
 </BaseLayout>
 
 <style>
+  .schedule-table .guest-speaker-link {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+  }
+
   .survey-banner {
     display: flex;
     flex-wrap: wrap;

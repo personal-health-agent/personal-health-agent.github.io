@@ -32,6 +32,7 @@ src/content/
 ├── project/project.md    # final project description
 ├── grading/grading.md    # the grading table
 ├── instructors/*.md      # one file per instructor
+├── guest-speakers/*.md   # guest talk titles, speaker details, abstracts, and bios
 ├── policies/*.md         # one per policy (AI use, privacy, devices, collaboration, ...)
 ├── legal/*.md            # term-independent public privacy and service terms
 └── weeks/*.md            # one file per week; drives the schedule table

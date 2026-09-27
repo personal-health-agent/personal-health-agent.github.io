@@ -1,0 +1,123 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../utils/url';
+
+const courseEntry = (await getEntry('course', 'course'))!;
+const speakerEntry = (await getEntry('guest-speakers', 'ali-heydari'))!;
+const course = courseEntry.data;
+const speaker = speakerEntry.data;
+const weekEntry = (await getCollection('weeks')).find((entry) => entry.data.week === speaker.week);
+const { Content } = await speakerEntry.render();
+---
+
+<BaseLayout
+  title={`${speaker.name} · Guest talk`}
+  description={`Week ${speaker.week} guest talk by ${speaker.name}, ${speaker.affiliation}: ${speaker.title}`}
+>
+  <div class="container-wide guest-page">
+    <nav aria-label="Breadcrumb" class="small guest-breadcrumb">
+      <a href={withBase('/#schedule')}>← {course.shortName ?? course.code} course schedule</a>
+    </nav>
+
+    <p class="meta course-meta">
+      {course.code}{course.crossListed && <Fragment> · {course.crossListed}</Fragment>} · {course.term}
+    </p>
+
+    <header class="guest-header">
+      <div>
+        <p class="meta talk-date">
+          Week {speaker.week} guest talk{weekEntry && <Fragment> · {weekEntry.data.date}</Fragment>}
+          <Fragment> · {speaker.location}</Fragment>
+        </p>
+        <h1>{speaker.title}</h1>
+        <p class="speaker-name">{speaker.name}</p>
+        <p class="speaker-role">{speaker.role}, {speaker.affiliation}</p>
+      </div>
+      <img
+        class="speaker-photo"
+        src={withBase(speaker.photo)}
+        alt={speaker.name}
+        width="675"
+        height="1044"
+        decoding="async"
+      />
+    </header>
+
+    <article class="md-prose guest-prose">
+      <Content />
+    </article>
+
+    <hr />
+
+    <footer class="small">
+      <a href={withBase('/#schedule')}>Back to the course schedule</a>
+    </footer>
+  </div>
+</BaseLayout>
+
+<style>
+  .guest-page {
+    padding-top: 2.5rem;
+    padding-bottom: 4rem;
+  }
+  .guest-breadcrumb {
+    margin-bottom: 1.5rem;
+  }
+  .course-meta {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    margin-bottom: 1rem;
+  }
+  .guest-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: 2.5rem;
+    align-items: start;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .talk-date {
+    margin-bottom: 0.75rem;
+  }
+  .guest-header h1 {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    line-height: 1.25;
+    margin-bottom: 1.5rem;
+  }
+  .speaker-name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.125rem;
+  }
+  .speaker-role {
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .speaker-photo {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+  }
+  .guest-prose {
+    max-width: 82ch;
+  }
+  .guest-prose :global(h2) {
+    font-size: 1.375rem;
+    margin-top: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  .guest-prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+  @media (max-width: 700px) {
+    .guest-header {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .speaker-photo {
+      max-width: 210px;
+    }
+  }
+</style>
