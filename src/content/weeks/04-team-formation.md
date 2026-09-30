@@ -3,6 +3,8 @@ week: 4
 date: "Oct 2"
 title: "Team Formation + Project Scoping Studio"
 objective: "Team up, shape your project idea, and learn what separates health AI that works in the real world from projects that quietly fail."
+slidesUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-04/slides-04.pdf"
+labUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-04/lab-04.ipynb"
 guestSpeaker:
   name: "Dr. Ali Heydari"
   path: "/guest-speaker-ali-heydari/"
