@@ -226,7 +226,16 @@ const tas = [
                     )}
                   </td>
                   <td class="col-lab">
-                    {w.data.labUrl && (
+                    {w.data.labUrl && (w.data.labUrl.startsWith('/') ? (
+                      <a
+                        href={withBase(w.data.labUrl)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Week ${w.data.week} lab exercise`}
+                      >
+                        Exercise
+                      </a>
+                    ) : (
                       <a
                         href={w.data.labUrl}
                         target="_blank"
@@ -235,7 +244,7 @@ const tas = [
                       >
                         Notebook
                       </a>
-                    )}
+                    ))}
                   </td>
                 </tr>
               )
