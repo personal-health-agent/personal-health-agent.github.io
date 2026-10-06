@@ -3,6 +3,7 @@ week: 5
 date: "Oct 9"
 title: "Data Management I: Relational, Document & Clinical Data Stores"
 objective: "Build databases that hold clinical records and notes, and learn to pull structured facts out of messy medical text."
+slidesUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-05/slides-05.pdf"
 labUrl: "/weeks/05-exercise.html"
 readings:
   - { title: "MIMIC-IV, a freely accessible electronic health record dataset", authors: "Johnson et al.", venue: "Scientific Data", year: 2023, link: "https://doi.org/10.1038/s41597-022-01899-x" }
