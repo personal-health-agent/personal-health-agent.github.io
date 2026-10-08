@@ -7,7 +7,7 @@ Each team of 3–4 builds a working Personal Health Assistant over the term: it 
 
 The project has three deliverables, and your project grade accumulates across them:
 
-- **Part 1 — Project idea one-pager** (Week 4 · Oct 2) · graded with the Week 4 lab
+- **Part 1 — Project idea one-pager** (Week 4 · submitted Oct 2) · graded with the Week 4 lab
 - **Part 2 — Proposal presentation** (Week 9 · Nov 6) · **15%**
 - **Part 3 — Final demo** (Week 14 · Dec 11) · **15%** implementation + **15%** demo + **15%** writeup
 
