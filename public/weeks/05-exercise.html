@@ -491,12 +491,12 @@ async function llm(system, user, fallback) {
   });
   const j = await r.json();
   if (!r.ok) throw new Error(j.error?.message || r.statusText);
-  return j.choices[0].message.content.replace(/```sql|```/g, '').trim();
+  return j.choices[0].message.content;
 }
 const SCHEMA_TEXT = () => sc.rows.map(r => `${r.table}(${r.columns})`).join('; ');
 
 // ---------- section 3: generated schema ----------
-const DDL_SYSTEM = 'You write DuckDB SQL. Return only SQL, no explanation.';
+const DDL_SYSTEM = 'You write DuckDB SQL.';
 const DDL_USER = `Write a CREATE TABLE statement named lab_import for this export from a lab system. Use the CSV header names as column names. Here are the first 3 rows:\n${CSV_SAMPLE}`;
 $('csv').textContent = CSV;
 $('ddlsys').value = DDL_SYSTEM; $('ddluser').value = DDL_USER;
@@ -505,10 +505,11 @@ const Q3 = questions('3', 'q3', [{ label: 'Generated schema', html: 'Ask for a s
 $('askddl').onclick = async () => {
   $('ddlout').innerHTML = '<p class="muted">Asking…</p>';
   try {
-    $('ddl').value = await llm($('ddlsys').value, $('ddluser').value, DRAFT_DDL);
+    const reply = await llm($('ddlsys').value, $('ddluser').value, DRAFT_DDL);
+    $('ddl').value = reply;
     $('ddl').dispatchEvent(new Event('input'));
-    record(Q3.qid, 'ask_model', { model: $('apikey').value ? $('model').value : 'none (typical draft)', prompt: { system: $('ddlsys').value, user: $('ddluser').value }, response: $('ddl').value });
-    $('ddlout').innerHTML = `<div class="box">${$('apikey').value ? 'Model draft loaded.' : 'No key: a typical draft is shown.'} It was written from the rows in the prompt, not the whole file. Load the full file and check it.</div>`;
+    record(Q3.qid, 'ask_model', { model: $('apikey').value ? $('model').value : 'none (typical draft)', prompt: { system: $('ddlsys').value, user: $('ddluser').value }, response: reply });
+    $('ddlout').innerHTML = `<div class="box">${$('apikey').value ? 'Schema box: model output.' : 'Schema box: pre-populated draft (no API key).'}</div>`;
   } catch (e) { $('ddlout').innerHTML = `<div class="err">${esc(e.message)}</div>`; record(Q3.qid, 'ask_model', { model: $('model').value, prompt: { system: $('ddlsys').value, user: $('ddluser').value }, error: e.message }); }
 };
 async function loadDDL() {
@@ -595,16 +596,17 @@ const GEN_QS = [
       if (ids.includes('P003') || ids.includes('P004')) return ['bad', 'P003 and P004 have only one test each, so they cannot show a change.'];
       return ['bad', 'Expected only P001 (8.9 on 2025-09-01 → 7.5 on 2026-06-20).']; } },
 ];
-const GEN_SYSTEM = () => 'You write DuckDB SQL. Schema: ' + SCHEMA_TEXT() + '. Return only SQL, no explanation.';
+const GEN_SYSTEM = () => 'You write DuckDB SQL. Schema: ' + SCHEMA_TEXT() + '.';
 const Q4 = questions('4', 'q4', GEN_QS.map(g => ({ ...g, html: esc(g.q) })), { box: $('gensql'), out: $('genout'), initial: g => g.draft,
   onSelect: g => { $('gensys').value = GEN_SYSTEM(); $('question').value = g.q; } });
 $('askq').onclick = async () => {
   $('genout').innerHTML = '<p class="muted">Asking…</p>';
   try {
-    $('gensql').value = await llm($('gensys').value, $('question').value, GEN_QS[Q4.index].draft);
+    const reply = await llm($('gensys').value, $('question').value, GEN_QS[Q4.index].draft);
+    $('gensql').value = reply;
     $('gensql').dispatchEvent(new Event('input'));
-    record(Q4.qid, 'ask_model', { model: $('apikey').value ? $('model').value : 'none (pre-populated draft)', prompt: { system: $('gensys').value, user: $('question').value }, response: $('gensql').value });
-    $('genout').innerHTML = `<div class="box">${$('apikey').value ? 'Model draft loaded.' : 'No key: a typical wrong draft is shown.'} Run it, then check it.</div>`;
+    record(Q4.qid, 'ask_model', { model: $('apikey').value ? $('model').value : 'none (pre-populated draft)', prompt: { system: $('gensys').value, user: $('question').value }, response: reply });
+    $('genout').innerHTML = `<div class="box">${$('apikey').value ? 'SQL box: model output.' : 'SQL box: pre-populated draft (no API key).'}</div>`;
   } catch (e) { $('genout').innerHTML = `<div class="err">${esc(e.message)}</div>`; record(Q4.qid, 'ask_model', { model: $('model').value, prompt: { system: $('gensys').value, user: $('question').value }, error: e.message }); }
 };
 $('rungen').onclick = async () => {
