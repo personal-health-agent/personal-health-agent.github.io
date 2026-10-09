@@ -1,12 +1,11 @@
 ---
 week: 7
 date: "Oct 23"
-title: "Data Management III: Embeddings, Vector Search & RAG"
-objective: "Prompt LLMs for health tasks and see where they go wrong, then close out data management: index your health data for search by meaning, and ground LLM answers in it with retrieval (RAG). Lab time is reserved for catching up on the data-management stack."
+title: "Data Management III: Time-Series, Multimodal Data & Feature Extraction"
+objective: "Close out data management: handle high-frequency wearable data at scale and turn weeks of raw signal into features your assistant can actually use. Lab time is reserved for catching up on the data-management stack."
 assessment: "Quiz 1 (in class)"
 readings:
-  - { title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", authors: "Lewis et al.", venue: "NeurIPS", year: 2020, link: "https://arxiv.org/abs/2005.11401" }
-  - { title: "Large language models encode clinical knowledge", authors: "Singhal et al.", venue: "Nature", year: 2023, link: "https://doi.org/10.1038/s41586-023-06291-2" }
-  - { title: "Retrieval-Augmented Generation for LLMs: A Survey", authors: "Gao et al.", venue: "arXiv", year: 2024, optional: true, link: "https://arxiv.org/abs/2312.10997" }
+  - { title: "How Glooko turns 3B+ data points per month into diabetes care", authors: "TimescaleDB", venue: "Tiger Data", year: 2024, type: "docs", link: "https://www.tigerdata.com/blog/how-glooko-turns-3b-data-points-per-month-into-lifesaving-diabetes-healthcare-tiger-data" }
+  - { title: "Comparative analysis of time-series databases for low-power sensor networks", authors: "Freedman et al.", venue: "Sensors", year: 2020, link: "https://doi.org/10.3390/s20082110" }
 status: planned
 ---
