@@ -3,6 +3,8 @@ week: 6
 date: "Oct 16"
 title: "Data Management II: Embeddings, Vector Search & RAG"
 objective: "Prompt LLMs for health tasks and see where they go wrong, then index your health data for search by meaning and ground LLM answers in it with retrieval (RAG)."
+slidesUrl: "https://github.com/personal-health-agent/binf4070-2026/blob/main/week-06/slides-06.pdf"
+labUrl: "https://github.com/personal-health-agent/personal-health-agent.github.io/blob/main/public/weeks/06-exercise.ipynb"
 readings:
   - { title: "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks", authors: "Lewis et al.", venue: "NeurIPS", year: 2020, link: "https://arxiv.org/abs/2005.11401" }
   - { title: "Large language models encode clinical knowledge", authors: "Singhal et al.", venue: "Nature", year: 2023, link: "https://doi.org/10.1038/s41586-023-06291-2" }
