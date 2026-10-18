@@ -25,8 +25,8 @@ const { Content: GradingBody } = await gradingEntry.render();
 
 // Teaching assistants (not a content collection — small and stable).
 const tas = [
-  { name: 'Millie Wu', email: 'mw3209@columbia.edu' },
-  { name: 'Reya Vir',  email: 'rrv2116@columbia.edu' },
+  { name: 'Millie Wu', email: 'mw3209@columbia.edu', officeHours: 'Monday, 6–7 PM ET', location: 'CS Lounge' },
+  { name: 'Reya Vir',  email: 'rrv2116@columbia.edu', officeHours: 'Wednesday, 10–11 AM ET', location: 'CS Lounge' },
 ];
 ---
 <BaseLayout>
@@ -136,13 +136,12 @@ const tas = [
       <div style="margin-top: 1.25rem;">
         <span class="meta" style="text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem;">Teaching assistants</span>
         <div class="small" style="margin-top: 0.375rem;">
-          {tas.map((t, i) => (
-            <Fragment>
-              {i > 0 && <span> · </span>}
-              {t.name} (<a href={`mailto:${t.email}`}>{t.email}</a>)
-            </Fragment>
+          {tas.map((t) => (
+            <div style="margin-bottom: 0.5rem;">
+              <strong>{t.name}</strong> (<a href={`mailto:${t.email}`}>{t.email}</a>)
+              <div>Office hours: {t.officeHours} · Location: {t.location}</div>
+            </div>
           ))}
-          <span> · office hours TBD</span>
         </div>
         <p class="small" style="margin-top: 0.5rem; color: var(--text-muted);">
           TAs support weekly labs, office hours, Slack, grading of labs and project milestones, and the final showcase.
