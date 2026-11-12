@@ -248,8 +248,14 @@ function record(qid, action, data = {}) {
   if (work.history.length > MAX_HISTORY) work.history.splice(0, work.history.length - MAX_HISTORY);
   const a = work.answers[qid] ||= {};
   if (action !== 'answer') {
+    const has = k => Object.prototype.hasOwnProperty.call(data, k);
+    const newAttempt = action !== 'check' && has('sql');
     a.submissions = (a.submissions || 0) + 1; a.last_action = action;
-    for (const k of ['sql', 'prompt', 'response', 'result', 'check', 'error', 'model_calls']) { if (k in data) a[k] = data[k]; else if (k === 'error' || k === 'model_calls') delete a[k]; }
+    for (const k of ['sql', 'prompt', 'response', 'result', 'check', 'error', 'model_calls']) { if (has(k)) a[k] = data[k]; else if (k === 'error' || k === 'model_calls') delete a[k]; }
+    if (newAttempt) {
+      if (!has('result')) delete a.result;
+      if (!has('check')) delete a.check;
+    }
   }
   a.updated_at = t;
   saveWork(); refreshSaved(qid); refreshSummary();
@@ -312,19 +318,28 @@ function exportWork() {
 $('stuname').value = work.student.name || ''; $('stuuni').value = work.student.uni || '';
 $('stuname').oninput = () => { work.student.name = $('stuname').value.trim(); saveWork(); };
 $('stuuni').oninput = () => { work.student.uni = $('stuuni').value.trim(); saveWork(); };
-$('exportwork').onclick = () => {
-  $('exportjson').value = exportWork();
-  $('exportnote').textContent = (work.student.name && work.student.uni) ? '' : 'Add your name and UNI before you submit.';
-};
+function refreshExport() {
+  const json = exportWork();
+  const missingIdentity = !(work.student.name && work.student.uni);
+  $('exportjson').value = json;
+  $('exportnote').textContent = missingIdentity ? 'Add your name and UNI before you submit.' : '';
+  return { json, missingIdentity };
+}
+$('exportwork').onclick = refreshExport;
 $('copywork').onclick = async () => {
-  if (!$('exportjson').value) $('exportwork').click();
-  try { await navigator.clipboard.writeText($('exportjson').value); $('exportnote').textContent = 'Copied.'; }
-  catch { $('exportjson').select(); $('exportnote').textContent = 'Select the text and copy it (Ctrl/⌘ + C).'; }
+  const { json, missingIdentity } = refreshExport();
+  try {
+    await navigator.clipboard.writeText(json);
+    $('exportnote').textContent = missingIdentity ? 'Copied. Add your name and UNI before you submit.' : 'Copied.';
+  } catch {
+    $('exportjson').select();
+    $('exportnote').textContent = 'Select the text and copy it (Ctrl/⌘ + C).' + (missingIdentity ? ' Add your name and UNI before you submit.' : '');
+  }
 };
 $('downloadwork').onclick = () => {
-  $('exportwork').click();
+  const { json } = refreshExport();
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(new Blob([$('exportjson').value], { type: 'application/json' }));
+  a.href = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
   a.download = `week05-exercise-${(work.student.uni || 'student').replace(/[^\w-]/g, '')}.json`; a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 };
@@ -393,19 +408,29 @@ picker.addEventListener('input', showTable);
 await showTable();
 
 // ---------- section 2: run and check ----------
-let last = null, lastSQL = '';
+const q2Runs = {};
+const q2Qid = i => `2.${i + 1}`;
 async function runMain() {
   $('check').innerHTML = '';
-  lastSQL = $('sql').value;
-  try { last = await run(lastSQL); $('result').innerHTML = table(last); record(Q2.qid, 'run', { sql: lastSQL, result: summarize(last) }); }
-  catch (e) { last = null; $('result').innerHTML = `<div class="err">${esc(e.message)}</div>`; record(Q2.qid, 'run', { sql: lastSQL, error: e.message }); }
+  const qid = Q2.qid, sql = $('sql').value;
+  q2Runs[qid] = { sql, pending: true };
+  try {
+    const res = await run(sql);
+    q2Runs[qid] = { sql, res };
+    if (Q2.qid === qid) $('result').innerHTML = table(res);
+    record(qid, 'run', { sql, result: summarize(res) });
+  } catch (e) {
+    q2Runs[qid] = { sql, error: e.message };
+    if (Q2.qid === qid) $('result').innerHTML = `<div class="err">${esc(e.message)}</div>`;
+    record(qid, 'run', { sql, error: e.message });
+  }
 }
 $('run').onclick = runMain;
 $('sql').onkeydown = e => { if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) runMain(); };
 
 const nums = r => Object.values(r).filter(v => typeof v === 'number');
 const near = (a, b) => Math.abs(a - b) < 0.005;
-function check(q, res, sql = lastSQL) {
+function check(q, res, sql = '') {
   if (!res) return ['bad', 'Run a query first.'];
   const { cols, rows } = res;
   if (q === 1) {
@@ -418,10 +443,13 @@ function check(q, res, sql = lastSQL) {
   }
   if (q === 2) {
     const n = rows[0] ? nums(rows[0]) : [];
-    if (rows.length === 1 && n.includes(3)) return ['ok', 'Correct: 3 people (P001, P002, P004).'];
+    const idCol = cols.find(c => rows.length === 3 && rows.every(r => /^P\d{3}$/.test(String(r[c]))));
+    const got = idCol ? rows.map(r => String(r[idCol])).sort() : [];
+    if (rows.length === 1 && n.length === 1 && n[0] === 3) return ['ok', 'Correct: 3 people (P001, P002, P004).'];
     if (n.includes(6)) return ['bad', 'That counts results (rows), not people. A person with several results is counted once.'];
-    if (rows.length === 3 && !n.length) return ['ok', 'Correct: 3 people. COUNT(DISTINCT patient_id) returns the same number as one row.'];
-    return ['bad', 'Expected one number. Count each person once among HbA1c (4548-4) results above 7.0.'];
+    if (got.join() === 'P001,P002,P004') return ['ok', 'Correct: P001, P002, and P004.'];
+    if (idCol) return ['bad', `Expected P001, P002, and P004; got ${got.join(', ')}. Check the HbA1c and > 7.0 filters.`];
+    return ['bad', 'Expected one count or the three patient IDs P001, P002, and P004. Count each person once among HbA1c (4548-4) results above 7.0.'];
   }
   if (q === 3) {
     const n = rows[0] ? nums(rows[0]) : [];
@@ -445,11 +473,24 @@ const Q2 = questions('2', 'q2', [
     hint: 'Use the same filter as question 2. <code>COUNT(*)</code> counts rows, and in <code>lab_results</code> one row is one result.' },
   { label: 'Metformin average', html: 'What is the average HbA1c among people taking metformin? What are the potential risks in computing this statistic?',
     hint: 'Before trusting an average over a join, run the same join with <code>SELECT *</code> and ask what one row represents.' },
-], { box: $('sql'), out: $('check'), initial: () => 'SELECT * FROM lab_results LIMIT 5;' });
+], {
+  box: $('sql'), out: $('result'), verdict: $('check'), initial: () => 'SELECT * FROM lab_results LIMIT 5;',
+  onSelect: (_, i) => {
+    const attempt = q2Runs[q2Qid(i)];
+    if (attempt?.res) $('result').innerHTML = table(attempt.res);
+    else if (attempt?.error) $('result').innerHTML = `<div class="err">${esc(attempt.error)}</div>`;
+  },
+});
 $('checkq').onclick = () => {
-  const q = Q2.index + 1, [cls, msg] = check(q, last);
+  const qid = Q2.qid, q = Q2.index + 1, attempt = q2Runs[qid];
+  const sql = attempt?.sql ?? $('sql').value;
+  const res = attempt?.res ?? null;
+  let cls, msg;
+  if (attempt?.pending) [cls, msg] = ['bad', 'Wait for this query to finish, then check it.'];
+  else if (attempt?.error) [cls, msg] = ['bad', 'Your last run failed. Fix the error and run it again.'];
+  else [cls, msg] = check(q, res, sql);
   $('check').innerHTML = `<div class="${cls}">Question ${q}: ${esc(msg)}</div>`;
-  record(Q2.qid, 'check', { sql: lastSQL, result: summarize(last), check: { status: cls, message: msg } });
+  record(qid, 'check', { sql, result: summarize(res), check: { status: cls, message: msg } });
 };
 
 // ---------- model access ----------
@@ -512,11 +553,15 @@ $('askddl').onclick = async () => {
     $('ddlout').innerHTML = `<div class="box">${$('apikey').value ? 'Schema box: model output.' : 'Schema box: pre-populated draft (no API key).'}</div>`;
   } catch (e) { $('ddlout').innerHTML = `<div class="err">${esc(e.message)}</div>`; record(Q3.qid, 'ask_model', { model: $('model').value, prompt: { system: $('ddlsys').value, user: $('ddluser').value }, error: e.message }); }
 };
-async function loadDDL() {
+let loadedDDL = null;
+async function loadDDL(sql = $('ddl').value) {
+  loadedDDL = null;
   await conn.query('DROP TABLE IF EXISTS lab_import');
-  await conn.query($('ddl').value);
+  await conn.query(sql);
   await conn.query(`INSERT INTO lab_import BY NAME SELECT * FROM read_csv('lab_export.csv', all_varchar = true)`);
-  return run('SELECT * FROM lab_import');
+  const res = await run('SELECT * FROM lab_import');
+  loadedDDL = sql;
+  return res;
 }
 function loadHint(msg) {
   if (/duplicate key|constraint violation/i.test(msg)) return 'A key or UNIQUE column repeats in the full file: one patient has several results.';
@@ -526,11 +571,13 @@ function loadHint(msg) {
 }
 $('loadddl').onclick = async () => {
   const sql = $('ddl').value;
-  try { const res = await loadDDL(); $('ddlout').innerHTML = '<div class="ok">Loaded all 6 rows. Now press “Check the load”.</div>' + table(res); record(Q3.qid, 'create_and_load', { sql, result: summarize(res) }); }
+  try { const res = await loadDDL(sql); $('ddlout').innerHTML = '<div class="ok">Loaded all 6 rows. Now press “Check the load”.</div>' + table(res); record(Q3.qid, 'create_and_load', { sql, result: summarize(res) }); }
   catch (e) { $('ddlout').innerHTML = `<div class="bad">The load failed. ${esc(loadHint(e.message))}</div><div class="err">${esc(e.message)}</div>`; record(Q3.qid, 'create_and_load', { sql, error: e.message }); }
 };
 // Compare what the table stored with what the CSV says.
-async function checkLoad() {
+async function checkLoad(sql = $('ddl').value) {
+  if (loadedDDL === null) return [['bad', 'Create and load the current schema before checking it.']];
+  if (sql !== loadedDDL) return [['bad', 'The schema has changed since it was loaded. Click “Create and load the CSV” before checking it.']];
   let t;
   try { t = await run('SELECT * FROM lab_import'); } catch { return [['bad', 'There is no lab_import table yet. Create and load it first.']]; }
   const out = [], rows = t.rows, cols = t.cols.map(c => c.toLowerCase());
@@ -554,8 +601,10 @@ async function checkLoad() {
   return out;
 }
 $('checkddl').onclick = async () => {
-  const items = await checkLoad();
-  record(Q3.qid, 'check', { sql: $('ddl').value, check: items.map(([status, message]) => ({ status, message })) });
+  const sql = $('ddl').value;
+  const current = loadedDDL !== null && sql === loadedDDL;
+  const items = await checkLoad(sql);
+  record(Q3.qid, 'check', { sql, ...(current ? {} : { result: null }), check: items.map(([status, message]) => ({ status, message })) });
   const icon = { ok: '<span style="color:#2e7d32;font-weight:700">✓</span>', bad: '<span style="color:#b3261e;font-weight:700">✗</span>', note: '<span style="color:#8a5a00;font-weight:700">!</span>' };
   $('ddlout').insertAdjacentHTML('beforeend', `<div class="box">${items.map(([k, m]) => `${icon[k]} ${esc(m)}`).join('<br>')}</div>`);
 };
@@ -1315,3 +1364,4 @@ if (location.hash === '#selftest') {
 </script>
 </body>
 </html>
+
